@@ -1,6 +1,8 @@
 # Formic Functions - Ant Queen of the Hill contest
 
-This is the code behind the JavaScript programming contest hosted on Programming Puzzles & Code Golf Stack Exchange.
+This is GNiklasch's fork of the code behind the JavaScript programming contest hosted on Programming Puzzles & Code Golf Stack Exchange.
+
+**For authoritative information and an up-to-date leaderboard, please do refer to [the original](https://github.com/trichoplax/formic-functions)!**
 
 ## [View/enter the contest here.](https://codegolf.stackexchange.com/questions/135102/formic-functions-ant-queen-of-the-hill-contest)
 
