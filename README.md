@@ -4,6 +4,8 @@ This is GNiklasch's fork of the code behind the JavaScript programming contest h
 
 **For authoritative information and an up-to-date leaderboard, please do refer to [the original](https://github.com/trichoplax/formic-functions)!**
 
+**[Run the present player on its Github Page](https://gniklasch.github.io/formic-functions-ex-trichoplax/)**
+
 ## [View/enter the contest here.](https://codegolf.stackexchange.com/questions/135102/formic-functions-ant-queen-of-the-hill-contest)
 
 ![dance floor ant GIF](https://i.stack.imgur.com/7xiOD.gif)
