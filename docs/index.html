@@ -103,6 +103,18 @@
 		Override max function return time (useful for testing on a different machine): <input id='permitted_time_override' class='width_5' type='number' value='15' min='1' max='999'/>ms
 	</div>
 	<div>
+		Cache repeated moves: <input id='enable_caching' type='checkbox'/>
+	</div>
+	<div>
+		Move cache size per player: <input id='old_gen_size' class='width_7' type='number' min='100' max='2000000' value='60000'/> old-generation and 8*<input id='eden_size' type='number' class='width_5' min='100' max='8000' value='5000'/> young-generation entries
+	</div>
+	<div>
+		Report cache management and statistics to console: <input id='enable_cache_stats' type='checkbox'/>
+	</div>
+	<div>
+		Bypass move caching (force ant function calls) for debugging the new challenger: <input id='no_nc_caching' type='checkbox'/>
+	</div>
+	<div>
 		Logging to console for debugging the new challenger: <input id='debug' type='checkbox'/>
 	</div>
 	<div>

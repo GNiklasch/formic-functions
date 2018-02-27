@@ -29,6 +29,11 @@ function setGlobals() {
 	population = []
 	moveCounter = 0
 	movesPerGame = $('#moves_per_game').val()
+	enableCaching = true
+	enableCacheStats = false
+	noNCCaching = false
+	oldGenSize = parseInt($('#old_gen_size').val(), 10)
+	edenSize = parseInt($('#eden_size').val(), 10)
 	paletteSize = 8
 	numberOfLeaderboards = 6
 	codeUpToDate = true
@@ -538,6 +543,24 @@ function initialiseInterface() {
 	})
 	$('#permitted_time_override').change(function() {
 		permittedTime = parseInt($('#permitted_time_override').val(), 10)
+	})
+	$('#enable_caching').prop('checked', true)
+	$('#enable_caching').change(function() {
+		enableCaching = $('#enable_caching').prop('checked')
+	})
+	$('#old_gen_size').change(function() {
+		oldGenSize = parseInt($('#old_gen_size').val(), 10)
+	})
+	$('#enable_cache_stats').prop('checked', false)
+	$('#enable_cache_stats').change(function() {
+		enableCacheStats = $('#enable_caching').prop('checked')
+	})
+	$('#eden_size').change(function() {
+		edenSize = parseInt($('#eden_size').val(), 10)
+	})
+	$('#no_nc_caching').prop('checked', false)
+	$('#no_nc_caching').change(function() {
+		noNCCaching = $('#no_nc_caching').prop('checked')
 	})
 	$('#debug').change(function() {
 		debug = $('#debug').prop('checked')
@@ -1451,6 +1474,10 @@ function getMoveMemoiser(f) {
 		var key = JSON.stringify(rotatedView)
 		var cache = ant.player.antCache
 		cache.accessCount++
+		if (!enableCaching ||
+			((ant.player.id === 0) && noNCCaching)) {
+			return f(ant, rotatedView)
+		}
 		if (cache.tenured.hasOwnProperty(key)) {
 			cache.tenuredHitsCount++
 			return cache.tenured[key]
@@ -1463,16 +1490,16 @@ function getMoveMemoiser(f) {
 			if (cache.youngGenPerHue[hue].hasOwnProperty(key)) {
 				cache.youngHitsCount++
 				var result = cache.youngGenPerHue[hue][key]
-				if (cache.tenuredEntries < 60000) {
-					delete cache.youngGenPerHue[hue][key]
+				if (cache.tenuredEntries < oldGenSize) {
+					// delete cache.youngGenPerHue[hue][key]
 					cache.tenured[key] = result
 					cache.tenuredEntries++
 				}
 				return result
 			} else { // cache miss
 				var result = f(ant, rotatedView)
-				if (cache.youngEntriesPerHue[hue] >= 5000) {
-					console.log(ant.player.title + " cache management: purging hue " + hue)
+				if (cache.youngEntriesPerHue[hue] >= edenSize) {
+					enableCacheStats && console.log(ant.player.title + " cache management: purging hue " + hue)
 					cache.youngGenPerHue[hue] = {}
 					cache.youngEntriesPerHue[hue] = 0
 				}
@@ -1485,10 +1512,13 @@ function getMoveMemoiser(f) {
 }
 
 function printMemoCache(player) {
-    var cache = player.antCache
-    console.log("Memo cache for " + player.title + ":")
-    console.log("- tenured entries:     " + cache.tenuredEntries)
-    console.log("- young gen entries:   [" +
+	if (!enableCacheStats) {
+		return
+	}
+	var cache = player.antCache
+	console.log("Memo cache for " + player.title + ":")
+	console.log("- tenured entries:     " + cache.tenuredEntries)
+	console.log("- young gen entries:   [" +
 		cache.youngEntriesPerHue[0] + ", " +
 		cache.youngEntriesPerHue[1] + ", " +
 		cache.youngEntriesPerHue[2] + ", " +
@@ -1497,9 +1527,9 @@ function printMemoCache(player) {
 		cache.youngEntriesPerHue[5] + ", " +
 		cache.youngEntriesPerHue[6] + ", " +
 		cache.youngEntriesPerHue[7] + "]")
-    console.log("- access count:        " + cache.accessCount)
-    console.log("- tenured hit count:   " + cache.tenuredHitsCount)
-    console.log("- young gen hit count: " + cache.youngHitsCount)
+	console.log("- access count:        " + cache.accessCount)
+	console.log("- tenured hit count:   " + cache.tenuredHitsCount)
+	console.log("- young gen hit count: " + cache.youngHitsCount)
 }
 
 function getMove(ant, rotatedView) {
