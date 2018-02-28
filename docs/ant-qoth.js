@@ -551,6 +551,10 @@ function initialiseInterface() {
 	$('#old_gen_size').change(function() {
 		oldGenSize = parseInt($('#old_gen_size').val(), 10)
 	})
+	$('#clear_cache').prop('disabled', false)
+	$('#clear_cache').click(function() {
+		clearMemoCache()
+	})
 	$('#enable_cache_stats').prop('checked', false)
 	$('#enable_cache_stats').change(function() {
 		enableCacheStats = $('#enable_caching').prop('checked')
@@ -1509,6 +1513,13 @@ function getMoveMemoiser(f) {
 			}
 		}
 	}
+}
+
+function clearMemoCache() {
+    	players.forEach(function(player) {
+		enableCacheStats && console.log("Clearing memo cache for " + player.title)
+		player.antCache = antCacheBuilder()
+	})
 }
 
 function printMemoCache(player) {
