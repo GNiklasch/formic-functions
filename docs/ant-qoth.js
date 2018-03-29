@@ -557,7 +557,7 @@ function initialiseInterface() {
 	})
 	$('#enable_cache_stats').prop('checked', false)
 	$('#enable_cache_stats').change(function() {
-		enableCacheStats = $('#enable_caching').prop('checked')
+		enableCacheStats = $('#enable_cache_stats').prop('checked')
 	})
 	$('#eden_size').change(function() {
 		edenSize = parseInt($('#eden_size').val(), 10)
