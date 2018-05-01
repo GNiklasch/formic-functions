@@ -14,9 +14,11 @@ function load() {
 }
 
 function confirmRefresh() {
-	window.addEventListener('beforeunload', function(e) {
-		e.returnValue = ''
-	})
+    window.addEventListener('beforeunload', function(e) {
+	var dialogText = 'confirm unload';
+	e.returnValue = dialogText;
+	return dialogText;
+    })
 }
 
 function setGlobals() {
@@ -1501,7 +1503,14 @@ function getMoveMemoiser(f) {
 				}
 				return result
 			} else { // cache miss
-				var result = f(ant, rotatedView)
+				var result0 = f(ant, rotatedView)
+			        var result = {cell:result0.cell}
+				if (result0.hasOwnProperty("color")) {
+					result.color = result0.color
+				}
+			        if (result0.hasOwnProperty("type")) {
+					result.type = result0.type
+				}
 				if (cache.youngEntriesPerHue[hue] >= edenSize) {
 					enableCacheStats && console.log(ant.player.title + " cache management: purging hue " + hue)
 					cache.youngGenPerHue[hue] = {}
